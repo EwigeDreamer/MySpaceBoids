@@ -29,7 +29,7 @@ public class PausePopup : PopupBase
 
     void GoToMenu()
     {
-        Debug.LogError("GO TO MENU!");
+        GameManager.StopGame();
     }
 }
 

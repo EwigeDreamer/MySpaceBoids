@@ -81,25 +81,29 @@ public static class SceneLoadingManager
         }
     }
 
-    public static Coroutine LoadMenu()
+    public static Coroutine LoadMenu(Action onStartLoad = null, Action onCompleteLoad = null)
     {
         return CorouWaiter.Start(GetRoutine());
         IEnumerator GetRoutine()
         {
             yield return ShowWaitScreen();
+            onStartLoad?.Invoke();
             yield return UnloadAll();
             yield return LoadScenes(MainMenuScenes);
+            onCompleteLoad?.Invoke();
             yield return HideWaitScreen();
         }
     }
-    public static Coroutine LoadGame()
+    public static Coroutine LoadGame(Action onStartLoad = null, Action onCompleteLoad = null)
     {
         return CorouWaiter.Start(GetRoutine());
         IEnumerator GetRoutine()
         {
             yield return ShowWaitScreen();
+            onStartLoad?.Invoke();
             yield return UnloadAll();
             yield return LoadScenes(GameScenes);
+            onCompleteLoad?.Invoke();
             yield return HideWaitScreen();
         }
     }

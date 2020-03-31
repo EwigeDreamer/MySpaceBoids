@@ -35,9 +35,15 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - Planets
+  - Boids
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Game
+    uniqueID: 743899589
+    locked: 0
+  - name: UI
+    uniqueID: 3622547917
     locked: 0

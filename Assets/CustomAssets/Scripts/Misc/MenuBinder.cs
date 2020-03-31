@@ -15,7 +15,7 @@ public class MenuBinder : MonoValidate
 
     private void Awake()
     {
-        this.main.OnPlayPressed += () => SceneLoadingManager.LoadGame();
+        this.main.OnPlayPressed += () => GameManager.StartGame();
         this.main.OnInfoPressed += () => PopupManager.OpenPopup<MessagePopup>().SetText("Created by Paul Sammler");
         this.main.OnQuitPressed += () => PopupManager.OpenPopup<QuittingPopup>();
     }

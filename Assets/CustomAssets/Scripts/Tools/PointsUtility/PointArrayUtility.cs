@@ -40,8 +40,26 @@ public static class PointArrayUtility
         int closest = 0;
         float sqrDist = float.PositiveInfinity;
         var i = collection.Count;
-        while (i --> 0)
+        while (i-- > 0)
         {
+            var sqrDistTmp = (point - collection[i]).sqrMagnitude;
+            if (sqrDistTmp > sqrDist) continue;
+            sqrDist = sqrDistTmp;
+            closest = i;
+        }
+        return closest;
+    }
+    public static int Closest<TColl>(this TColl collection, int index)
+            where TColl : IList<Vector2>
+    {
+        if (collection == null) throw new ArgumentNullException(nameof(collection));
+        int closest = 0;
+        float sqrDist = float.PositiveInfinity;
+        var point = collection[index];
+        var i = collection.Count;
+        while (i-- > 0)
+        {
+            if (i == index) continue;
             var sqrDistTmp = (point - collection[i]).sqrMagnitude;
             if (sqrDistTmp > sqrDist) continue;
             sqrDist = sqrDistTmp;
