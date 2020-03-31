@@ -6,19 +6,19 @@ using System;
 
 public static class PointArrayUtility
 {
-    public static Vector2[] GetArrayOnRectViaBestCandidate(Rect rect, int count)
+    public static Vector2[] GetArrayOnRectViaBestCandidate(Rect rect, int pointCount)
     {
-        if (count < 1) throw new InvalidOperationException($"{nameof(count)} must be greater than zero!");
+        if (pointCount < 1) throw new InvalidOperationException($"{nameof(pointCount)} must be greater than zero!");
 
-        List<Vector2> points = new List<Vector2>(count);
+        List<Vector2> points = new List<Vector2>(pointCount);
         int candidateCount = 20;
         points.Add(rect.RandomPoint());
-        for (int i = 1; i < count; ++i)
+        for (int i = 1; i < pointCount; ++i)
         {
 
             Vector2 point = default;
             float sqrDist = 0f;
-            for (int j = 1; j > candidateCount; ++j)
+            for (int j = 1; j < candidateCount; ++j)
             {
                 var candidate = rect.RandomPoint();
                 var closest = points[points.Closest(candidate)];
@@ -31,6 +31,7 @@ public static class PointArrayUtility
         }
         return points.ToArray();
     }
+
 
     public static int Closest<TColl>(this TColl collection, Vector2 point)
             where TColl : IList<Vector2>
