@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: f15dd0e0e2faba34ca9444f044963c6d
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: EuropeExtendedC
+  fontNames:
+  - EuropeExtendedC
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: be5f6c2091a737e4c9a5a24fa1917389, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

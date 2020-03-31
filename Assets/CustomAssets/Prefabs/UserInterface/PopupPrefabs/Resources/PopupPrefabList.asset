@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfbfb5e2b5d262e4dac39f7f7e6ae295, type: 3}
+  m_Name: PopupPrefabList
+  m_EditorClassIdentifier: 
+  m_Popups:
+  - {fileID: 5188344536544873876, guid: 5806f5b28708e2f49858987f9a343a54, type: 3}
+  - {fileID: 5188344536544873876, guid: 1a5f8a673476dd346a3438967959b924, type: 3}
+  - {fileID: 5188344536544873876, guid: 07a66219ee1a3864aba1a1a11ec6ddcc, type: 3}
+  - {fileID: 5188344536544873876, guid: bfa86859e77322445a1113998797b096, type: 3}
+  - {fileID: 5188344536544873876, guid: 21195ce99f42fb042bbef16179b020b5, type: 3}
+  - {fileID: 5188344536544873876, guid: 04cc7d3a021ceab4c9958fe3f2c7d2e1, type: 3}
+  - {fileID: 5188344536544873876, guid: 5ad7ef9d88326e84ca9be615932b8724, type: 3}
+  - {fileID: 5188344536544873876, guid: 836b8b5f6fcb8ea44981cf24364551f1, type: 3}
