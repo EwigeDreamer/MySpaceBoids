@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using MyTools.Helpers;
 
-public class PlanetSelector : MonoValidate
+public class PlayerController : MonoValidate
 {
-    [SerializeField] PlanetSelectorUI selectorUI;
+    [SerializeField] BoidController boidController;
 
     protected override void OnValidate()
     {
         base.OnValidate();
-        ValidateFind(ref this.selectorUI);
+        ValidateGetComponent(ref this.boidController);
     }
 
-    private void Awake()
+    public void Init()
     {
-        //this.selectorUI
+        this.boidController.Init();
     }
 }

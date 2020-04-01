@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MyTools.Extensions.Vectors;
-using MyTools.Extensions.Vectors;
 
 public class PlanetSpawner : MonoBehaviour
 {
+#pragma warning disable 649
     [SerializeField] int planetCount = 10;
     [SerializeField] BoxCollider field;
     [SerializeField] Planet planetPrefab;
@@ -17,6 +17,7 @@ public class PlanetSpawner : MonoBehaviour
     [Space]
     [SerializeField] float minPartOfDist = 0.1f;
     [SerializeField] float maxPartOfDist = 0.4f;
+#pragma warning restore 649
 
     public void SpawnPlanets(List<Planet> list)
     {
