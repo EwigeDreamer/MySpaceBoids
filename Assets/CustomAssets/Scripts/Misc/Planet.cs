@@ -2,16 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MyTools.Helpers;
+using TMPro;
 
 public class Planet : MonoValidate
 {
 
     [SerializeField] SelectableObject selectable;
+    [SerializeField] TMP_Text label;
+    [SerializeField] new SpriteRenderer renderer;
 
-    public Vector3 Position { get; private set; } = default;
-    public float Radius { get; private set; } = 0.5f;
+    int id = -1;
+    int boidCount = 0;
+    float radius = 0.5f;
+    Vector3 position = default;
+
+    public float Id => this.id;
 
     public SelectableObject Selectable => this.selectable;
+
+    public Vector3 Position => this.position;
+
+    public float Radius => this.radius;
+
+    public int BoidCount
+    {
+        get => this.boidCount;
+        set
+        {
+            this.boidCount = value;
+            label.text = value.ToString();
+        }
+    }
+
+    public Color Color { set => this.renderer.color = value; }
+
 
     protected override void OnValidate()
     {
@@ -19,16 +43,14 @@ public class Planet : MonoValidate
         ValidateGetComponent(ref this.selectable);
     }
 
-    public void SetPosition(Vector3 position)
+    public void Init(Vector3 position, float radius, int planetId)
     {
+        this.position = position;
         TR.position = position;
-        Position = position;
-    }
-
-    public void SetRadius(float radius)
-    {
+        this.radius = radius;
         var scale = radius * 2f;
         TR.localScale = Vector3.one * scale;
-        Radius = radius;
+        id = planetId;
+        BoidCount = 0;
     }
 }

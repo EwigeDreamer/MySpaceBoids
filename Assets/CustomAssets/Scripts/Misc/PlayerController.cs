@@ -6,6 +6,9 @@ using MyTools.Helpers;
 public class PlayerController : MonoValidate
 {
     [SerializeField] BoidController boidController;
+    [SerializeField] Color playerColor = Color.cyan;
+
+    List<int> capturedPlanetIds = new List<int>();
 
     protected override void OnValidate()
     {
@@ -15,6 +18,18 @@ public class PlayerController : MonoValidate
 
     public void Init()
     {
-        this.boidController.Init();
+        this.boidController.Init(new BoidControllerInitParam
+        {
+            color = this.playerColor
+        });
+        var planetId = GameView.I.PlanetController.GetBottomPlanetId();
+
+    }
+
+    void CapturePlanet(int index)
+    {
+        var planet = GameView.I.PlanetController.Planets[index];
+        planet.Color = playerColor;
+        planet.BoidCount = 1;
     }
 }

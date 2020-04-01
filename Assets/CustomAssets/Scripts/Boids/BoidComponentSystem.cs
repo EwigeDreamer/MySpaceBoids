@@ -5,9 +5,11 @@ using Unity.Transforms;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+using Unity.Burst;
 
 public class BoidsSystemGroup { }
 
+[BurstCompile]
 [UpdateBefore(typeof(BoidsSystemGroup))]
 public class NeighborDetectionSystem : ComponentSystem
 {
@@ -17,6 +19,7 @@ public class NeighborDetectionSystem : ComponentSystem
         public readonly int Length;
         [ReadOnly] public SharedComponentDataArray<BoidParamsComponent> parameters;
         [ReadOnly] public ComponentDataArray<Position> positions;
+        [ReadOnly] public ComponentDataArray<PlanetBorn> borns;
         [ReadOnly] public EntityArray entities;
         public ComponentDataArray<Velocity> velocities;
         [WriteOnly] public BufferArray<NeighborsEntityBuffer> neighbors;
@@ -32,6 +35,7 @@ public class NeighborDetectionSystem : ComponentSystem
             var param = data.parameters[i];
             float prodThresh = math.cos(math.radians(param.neighborFov));
             float distThresh = param.neighborDistance;
+            var born = data.borns[i];
             data.neighbors[i].Clear();
 
             float3 pos0 = data.positions[i].Value;
@@ -40,6 +44,8 @@ public class NeighborDetectionSystem : ComponentSystem
             for (int j = 0; j < data.Length; ++j)
             {
                 if (i == j) continue;
+                var neighborBorn = data.borns[j];
+                if (born.Index != neighborBorn.Index) continue;
 
                 float3 pos1 = data.positions[j].Value;
                 var to = pos1 - pos0;
@@ -59,6 +65,7 @@ public class NeighborDetectionSystem : ComponentSystem
     }
 }
 
+[BurstCompile]
 [UpdateInGroup(typeof(BoidsSystemGroup))]
 public class ObstacleSystem : ComponentSystem
 {
@@ -69,6 +76,7 @@ public class ObstacleSystem : ComponentSystem
         [ReadOnly] public SharedComponentDataArray<BoidParamsComponent> parameters;
         [ReadOnly] public ComponentDataArray<Position> positions;
         [ReadOnly] public SharedComponentDataArray<PlanetsComponent> planets;
+        [ReadOnly] public ComponentDataArray<PlanetBorn> borns;
         [ReadOnly] public ComponentDataArray<PlanetTarget> targets;
         public ComponentDataArray<Acceleration> accelerations;
 #pragma warning restore 649
@@ -85,10 +93,12 @@ public class ObstacleSystem : ComponentSystem
             var weight = param.obstacleWeight;
             float3 pos = data.positions[i].Value;
             float3 accel = data.accelerations[i].Value;
+            var born = data.borns[i];
             var target = data.targets[i];
             var planets = data.planets[i];
             for (int j = 0; j < planets.Count; ++j)
             {
+                if (j == born.Index) continue;
                 if (j == target.Index) continue;
                 var point = planets.Positions[j];
                 point.z = pos.z;
@@ -105,6 +115,7 @@ public class ObstacleSystem : ComponentSystem
     }
 }
 
+[BurstCompile]
 [UpdateInGroup(typeof(BoidsSystemGroup))]
 public class TargetSystem : ComponentSystem
 {
@@ -140,6 +151,7 @@ public class TargetSystem : ComponentSystem
     }
 }
 
+[BurstCompile]
 [UpdateInGroup(typeof(BoidsSystemGroup))]
 public class SeparationSystem : ComponentSystem
 {
@@ -181,7 +193,7 @@ public class SeparationSystem : ComponentSystem
     }
 }
 
-
+[BurstCompile]
 [UpdateInGroup(typeof(BoidsSystemGroup))]
 public class AlignmentSystem : ComponentSystem
 {
@@ -222,6 +234,7 @@ public class AlignmentSystem : ComponentSystem
     }
 }
 
+[BurstCompile]
 [UpdateInGroup(typeof(BoidsSystemGroup))]
 public class CohesionSystem : ComponentSystem
 {
@@ -263,6 +276,7 @@ public class CohesionSystem : ComponentSystem
     }
 }
 
+[BurstCompile]
 [UpdateAfter(typeof(BoidsSystemGroup))]
 public class MoveSystem : ComponentSystem
 {
@@ -308,3 +322,38 @@ public class MoveSystem : ComponentSystem
     }
 }
 
+[BurstCompile]
+[UpdateAfter(typeof(MoveSystem))]
+public class CheckTargetSystem : ComponentSystem
+{
+    struct Data
+    {
+#pragma warning disable 649
+        public readonly int Length;
+        [ReadOnly] public EntityArray entities;
+        [ReadOnly] public ComponentDataArray<Position> positions;
+        [ReadOnly] public SharedComponentDataArray<PlanetsComponent> planets;
+        [ReadOnly] public ComponentDataArray<PlanetTarget> targets;
+        [ReadOnly] public SharedComponentDataArray<ManagerLinkComponent> managers;
+#pragma warning restore 649
+    }
+
+    [Inject] Data data;
+
+    protected override void OnUpdate()
+    {
+        var dt = Time.deltaTime;
+        for (int i = 0; i < data.Length; ++i)
+        {
+            var pos = data.positions[i].Value;
+            var targetId = data.targets[i].Index;
+            var planets = data.planets[i];
+            var planetPos = planets.Positions[targetId];
+            var planetRadius = planets.Radiuses[targetId];
+            var dist = math.distance(pos, planetPos);
+            if (dist > planetRadius) continue;
+            data.managers[i].Manager.HitPlanet(targetId);
+            PostUpdateCommands.DestroyEntity(data.entities[i]);
+        }
+    }
+}

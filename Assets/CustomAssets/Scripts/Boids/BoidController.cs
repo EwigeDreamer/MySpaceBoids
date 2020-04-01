@@ -11,8 +11,16 @@ using System.Linq;
 using Unity.Collections;
 using MyTools.Helpers;
 
+public struct BoidControllerInitParam
+{
+    public Color color;
+}
+
 public class BoidController : MonoValidate
 {
+    public event System.Action<int, int> OnEmitBoids = delegate { };
+    public event System.Action<int, int> OnHitBoid = delegate { };
+
 #pragma warning disable 649
     [SerializeField] BoidParameters parameters;
     [SerializeField] new RenderMesh renderer;
@@ -23,7 +31,7 @@ public class BoidController : MonoValidate
     PlanetsComponent planetsConponent = default;
 #pragma warning restore 649
 
-    public void Init()
+    public void Init(BoidControllerInitParam param)
     {
         this.manager = World.Active.GetOrCreateManager<EntityManager>();
         this.archetype = manager.CreateArchetype(
@@ -32,12 +40,15 @@ public class BoidController : MonoValidate
             typeof(Scale),
             typeof(Velocity),
             typeof(Acceleration),
+            typeof(PlanetBorn),
             typeof(PlanetTarget),
             typeof(BoidParamsComponent),
             typeof(PlanetsComponent),
             typeof(RenderMesh),
             typeof(ManagerLinkComponent),
             typeof(NeighborsEntityBuffer));
+
+        this.renderer.material.color = param.color;
 
         var planets = GameView.I.PlanetController.Planets;
         this.planetsConponent = new PlanetsComponent
@@ -73,18 +84,19 @@ public class BoidController : MonoValidate
             manager.SetComponentData(entity, new Scale { Value = scale });
             manager.SetComponentData(entity, new Velocity { Value = new float3(dirToTarget.x, dirToTarget.y, dirToTarget.z) * parameters.initSpeed });
             manager.SetComponentData(entity, new Acceleration { Value = float3.zero });
+            manager.SetComponentData(entity, new PlanetBorn { Index = bornPlanetId });
             manager.SetComponentData(entity, new PlanetTarget { Index = targetPlanetId });
             manager.SetSharedComponentData(entity, parameters);
             manager.SetSharedComponentData(entity, planetsConponent);
             manager.SetSharedComponentData(entity, renderer);
             manager.SetSharedComponentData(entity, new ManagerLinkComponent { Manager = this });
         }
+        OnEmitBoids(bornPlanetId, count);
     }
 
-    [ContextMenu("TEST")]
-    void Test()
+    public void HitPlanet(int planetId)
     {
-        CreateGroup(0, 1, 100);
+        OnHitBoid(planetId, 1);
     }
 
     private void OnDestroy()

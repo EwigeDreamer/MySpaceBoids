@@ -33,6 +33,11 @@ public struct PlanetTarget : IComponentData
     public int Index;
 }
 
+public struct PlanetBorn : IComponentData
+{
+    public int Index;
+}
+
 public struct ManagerLinkComponent : ISharedComponentData
 {
     public BoidController Manager;

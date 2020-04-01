@@ -44,12 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c16b2c2374393a64dac13f814e061eef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  planetCount: 10
+  planetCount: 8
   field: {fileID: 1869306600757635787}
   planetPrefab: {fileID: 1509013668407397954, guid: 714f281e44ee5ac438b447368a4a8ae9,
     type: 3}
   minPlanetRadius: 2
-  maxPlanetRadius: 5
+  maxPlanetRadius: 2.5
   minPartOfDist: 0.2
   maxPartOfDist: 0.4
 --- !u!65 &1869306600757635787

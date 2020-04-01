@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c14ccc19bce04a74e93b1b40837df000, type: 3}
   m_Name: BoidParameters
   m_EditorClassIdentifier: 
-  initSpeed: 2
-  minSpeed: 2
-  maxSpeed: 5
-  neighborDistance: 1
-  neighborFov: 90
-  separationWeight: 5
-  alignmentWeight: 2
-  cohesionWeight: 3
+  list:
+    initSpeed: 3
+    minSpeed: 2
+    maxSpeed: 5
+    neighborDistance: 1
+    neighborFov: 90
+    separationWeight: 20
+    alignmentWeight: 5
+    cohesionWeight: 20
+    obstacleDistance: 5
+    obstacleWeight: 5
+    targetWeight: 10

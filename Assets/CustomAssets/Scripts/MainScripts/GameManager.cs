@@ -15,7 +15,7 @@ public static class GameManager
         void InitGame()
         {
             GameView.I.Init();
-            //PauseManager.PauseEnabled = true;
+            PauseManager.PauseEnabled = true;
         }
     }
 

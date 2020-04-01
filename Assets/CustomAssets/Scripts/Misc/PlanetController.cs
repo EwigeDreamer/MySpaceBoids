@@ -8,7 +8,7 @@ public class PlanetController : MonoValidate
 {
     [SerializeField] PlanetSpawner planetSpawner;
 
-    [SerializeField] List<Planet> planets = new List<Planet>();
+    List<Planet> planets = new List<Planet>();
 
     ReadOnlyCollection<Planet> planetsRO = null;
     public ReadOnlyCollection<Planet> Planets => 
@@ -23,5 +23,21 @@ public class PlanetController : MonoValidate
     public void Init()
     {
         this.planetSpawner.SpawnPlanets(this.planets);
+    }
+
+    public int GetBottomPlanetId()
+    {
+        float y = float.PositiveInfinity;
+        int index = -1;
+        var planets = this.planets;
+        int count = planets.Count;
+        for (int i = 0; i < count; ++i)
+        {
+            var planet = planets[i];
+            if (planet.Position.y > y) continue;
+            y = planet.Position.y;
+            index = i;
+        }
+        return index;
     }
 }
