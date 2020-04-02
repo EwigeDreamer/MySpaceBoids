@@ -20,6 +20,7 @@ public class NeighborDetectionSystem : ComponentSystem
         [ReadOnly] public SharedComponentDataArray<BoidParamsComponent> parameters;
         [ReadOnly] public ComponentDataArray<Position> positions;
         [ReadOnly] public ComponentDataArray<PlanetBorn> borns;
+        [ReadOnly] public ComponentDataArray<PlanetTarget> targets;
         [ReadOnly] public EntityArray entities;
         public ComponentDataArray<Velocity> velocities;
         [WriteOnly] public BufferArray<NeighborsEntityBuffer> neighbors;
@@ -35,7 +36,8 @@ public class NeighborDetectionSystem : ComponentSystem
             var param = data.parameters[i];
             float prodThresh = math.cos(math.radians(param.neighborFov));
             float distThresh = param.neighborDistance;
-            var born = data.borns[i];
+            var born = data.borns[i].Index;
+            var target = data.targets[i].Index;
             data.neighbors[i].Clear();
 
             float3 pos0 = data.positions[i].Value;
@@ -44,8 +46,10 @@ public class NeighborDetectionSystem : ComponentSystem
             for (int j = 0; j < data.Length; ++j)
             {
                 if (i == j) continue;
-                var neighborBorn = data.borns[j];
-                if (born.Index != neighborBorn.Index) continue;
+                var neighborBorn = data.borns[j].Index;
+                var neighborTarget = data.targets[j].Index;
+                if (born != neighborBorn) continue;
+                if (target != neighborTarget) continue;
 
                 float3 pos1 = data.positions[j].Value;
                 var to = pos1 - pos0;
@@ -93,13 +97,13 @@ public class ObstacleSystem : ComponentSystem
             var weight = param.obstacleWeight;
             float3 pos = data.positions[i].Value;
             float3 accel = data.accelerations[i].Value;
-            var born = data.borns[i];
-            var target = data.targets[i];
+            var born = data.borns[i].Index;
+            var target = data.targets[i].Index;
             var planets = data.planets[i];
             for (int j = 0; j < planets.Count; ++j)
             {
-                if (j == born.Index) continue;
-                if (j == target.Index) continue;
+                if (j == born) continue;
+                if (j == target) continue;
                 var point = planets.Positions[j];
                 point.z = pos.z;
                 var radius = planets.Radiuses[j];

@@ -6,7 +6,9 @@ using TMPro;
 
 public class Planet : MonoValidate
 {
+    public event System.Action OnRelease = delegate { };
 
+#pragma warning disable 649
     [SerializeField] SelectableObject selectable;
     [SerializeField] TMP_Text label;
     [SerializeField] new SpriteRenderer renderer;
@@ -15,8 +17,9 @@ public class Planet : MonoValidate
     int boidCount = 0;
     float radius = 0.5f;
     Vector3 position = default;
+#pragma warning restore 649
 
-    public float Id => this.id;
+    public int Id => this.id;
 
     public SelectableObject Selectable => this.selectable;
 
@@ -52,5 +55,11 @@ public class Planet : MonoValidate
         TR.localScale = Vector3.one * scale;
         id = planetId;
         BoidCount = 0;
+    }
+
+    public void Release()
+    {
+        OnRelease();
+        OnRelease = delegate { };
     }
 }

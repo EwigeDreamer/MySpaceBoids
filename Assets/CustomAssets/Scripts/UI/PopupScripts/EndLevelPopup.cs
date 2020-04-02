@@ -10,7 +10,6 @@ public class EndLevelPopup : PopupBase
     [SerializeField] GameObject windowWin;
     [SerializeField] GameObject windowFail;
     [SerializeField] Button[] returnBtns;
-    [SerializeField] GameObject[] levelStars;
 #pragma warning restore 649
 
     protected override int SortDelta => 0;
@@ -27,10 +26,9 @@ public class EndLevelPopup : PopupBase
         this.windowFail.SetActive(!isWin);
     }
 
-    public void SetStars(int value)
+    protected override void OnRemove()
     {
-        var stars = this.levelStars;
-        var count = stars.Length;
-        for (int i = 0; i < count; ++i) stars[i].SetActive(i < value);
+        base.OnRemove();
+        GameManager.StopGame();
     }
 }

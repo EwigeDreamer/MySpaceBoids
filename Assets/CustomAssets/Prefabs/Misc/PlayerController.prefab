@@ -45,6 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boidController: {fileID: 6639004641288121339}
+  playerColor: {r: 0, g: 1, b: 1, a: 1}
+  startBoidCount: 50
+  maxBoidCount: 500
+  boidGenerationSpeed: 5
 --- !u!114 &6639004641288121339
 MonoBehaviour:
   m_ObjectHideFlags: 0

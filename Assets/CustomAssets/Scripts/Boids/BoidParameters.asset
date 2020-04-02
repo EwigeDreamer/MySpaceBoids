@@ -18,9 +18,9 @@ MonoBehaviour:
     maxSpeed: 5
     neighborDistance: 1
     neighborFov: 90
-    separationWeight: 20
+    separationWeight: 25
     alignmentWeight: 5
-    cohesionWeight: 20
-    obstacleDistance: 5
+    cohesionWeight: 30
+    obstacleDistance: 3
     obstacleWeight: 5
-    targetWeight: 10
+    targetWeight: 8

@@ -5,23 +5,35 @@ using UnityEngine.EventSystems;
 using System;
 
 public class SelectorSensor : MonoBehaviour, 
-    IPointerClickHandler,
+    IPointerDownHandler,
     IBeginDragHandler,
     IDragHandler,
-    IEndDragHandler
+    IEndDragHandler,
+    IPointerUpHandler
 {
     public event Action<Vector2> OnClick = delegate { };
     public event Action<Vector2> OnBeginDrag = delegate { };
     public event Action<Vector2> OnDrag = delegate { };
     public event Action<Vector2> OnEndDrag = delegate { };
 
-    int pointerId = -1;
+    bool isPointerCatched = false;
+    int pointerId = 0;
+    bool clickFlag = false;
+
+
+    void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
+    {
+        if (this.isPointerCatched) return;
+        this.pointerId = eventData.pointerId;
+        this.isPointerCatched = true;
+        this.clickFlag = true;
+    }
 
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
-        if (this.pointerId > -1) return;
-        this.pointerId = eventData.pointerId;
+        if (eventData.pointerId != this.pointerId) return;
         OnBeginDrag(eventData.position);
+        this.clickFlag = false;
     }
 
     void IDragHandler.OnDrag(PointerEventData eventData)
@@ -33,12 +45,14 @@ public class SelectorSensor : MonoBehaviour,
     void IEndDragHandler.OnEndDrag(PointerEventData eventData)
     {
         if (eventData.pointerId != this.pointerId) return;
-        this.pointerId = -1;
         OnEndDrag(eventData.position);
     }
 
-    void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
+    void IPointerUpHandler.OnPointerUp(PointerEventData eventData)
     {
-        OnClick(eventData.position);
+        if (eventData.pointerId != this.pointerId) return;
+        this.isPointerCatched = false;
+        if (this.clickFlag) OnClick(eventData.position);
+        this.clickFlag = false;
     }
 }

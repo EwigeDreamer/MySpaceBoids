@@ -15,6 +15,7 @@ public static class GameManager
         void InitGame()
         {
             GameView.I.Init();
+            GameView.I.Player.OnAllPlanetsCaptured += () => PopupManager.OpenPopup<EndLevelPopup>().SetWindow(true);
             PauseManager.PauseEnabled = true;
         }
     }

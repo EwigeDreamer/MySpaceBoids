@@ -223,7 +223,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planetSpawner: {fileID: 1023545366}
-  planets: []
 --- !u!4 &1023545364 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1869306600757635786, guid: e4191e225224a724999a004c047e2f0b,
